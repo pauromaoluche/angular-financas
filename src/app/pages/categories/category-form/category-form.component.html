@@ -2,7 +2,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
         <li class="breadcrumb-item"><a routerLink="/categories">Categorias</a></li>
-        <li class="breadcrumb-item" aria-current="page">Formulario de categorias</li>
+        <li class="breadcrumb-item" aria-current="page">{{ pageTitle }}</li>
 
     </ol>
 </nav>
@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<form [formGroup]="categoryForm">
+<form [formGroup]="categoryForm" (submit)="submitForm()">
     <div class="card">
         <div class="card-header">
             Informações sobre a categoria
@@ -28,13 +28,21 @@
 
             <div class="mb-3">
                 <label for="inputCategory" class="form-label">Nome da categoria</label>
-                <input type="text" class="form-control" id="inputCategory">
+                <input type="text" class="form-control" id="inputCategory" formControlName="name">
+                <div class="text-danger" *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched">
+                    <div *ngIf="categoryForm.get('name')?.errors?.['required']">Nome é obrigatorio</div>
+                    <div *ngIf="categoryForm.get('name')?.errors?.['minlength']">Deve ter pelo menos 5 caracteres</div>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="inputDescCategory" class="form-label">Descrição da categoria</label>
-                <input type="text" class="form-control" id="inputDescCategory">
+                <input type="text" class="form-control" id="inputDescCategory" formControlName="description">
+                <div class="text-danger" *ngIf="categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched">
+                    <div *ngIf="categoryForm.get('description')?.errors?.['required']">Descrição é obrigatorio</div>
+                    <div *ngIf="categoryForm.get('description')?.errors?.['minlength']">Deve ter pelo menos 5 caracteres</div>
+                </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button [disabled]="submittingForm || categoryForm.invalid" type="submit" class="btn btn-primary">Salvar</button>
     </div>
 </form>
