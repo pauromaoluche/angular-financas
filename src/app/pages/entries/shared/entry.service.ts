@@ -7,7 +7,7 @@ import { Entry } from './entry.model';
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
+export class EntryService {
 
   private apiPath: string = "api/entries";
 
@@ -17,21 +17,21 @@ export class CategoryService {
     /* pipes recebe dados como entrada, processa esses dados e retorna uma saida*/
     return this.http.get(this.apiPath).pipe(
       catchError(this.handleError),
-      map(this.jsonDataToCategories),
+      map(this.jsonDataToEntries),
     )
   }
 
   getByid(id: number): Observable<Entry> {
     const url = `${this.apiPath}/${id}`;
     return this.http.get(url).pipe(
-      map(this.jsonDataToCategory),
+      map(this.jsonDataToEntry),
     )
   }
 
   create(entry: Entry): Observable<Entry> {
     return this.http.post(this.apiPath, entry).pipe(
       catchError(this.handleError),
-      map(this.jsonDataToCategory)
+      map(this.jsonDataToEntry)
     )
   }
 
@@ -53,13 +53,16 @@ export class CategoryService {
     )
   }
 
-  private jsonDataToCategories(jsonData: any[]): Entry[] {
+  private jsonDataToEntries(jsonData: any[]): Entry[] {
     const entries: Entry[] = [];
-    jsonData.forEach(element => entries.push(element as Entry));
+    jsonData.forEach(element => {
+      const entry = Object.assign(new Entry(), element);
+      entries.push(entry);
+    });
     return entries;
   }
 
-  private jsonDataToCategory(jsonData: any): Entry {
+  private jsonDataToEntry(jsonData: any): Entry {
     return jsonData as Entry;
   }
 
