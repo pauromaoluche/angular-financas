@@ -23,7 +23,7 @@ export class CategoryFormComponent implements OnInit {
   categoryForm!: FormGroup;
   pageTitle!: String;
   /* Caputa os erros do servidor */
-  serverErrorMessages: string[] = [];
+  serverErrorMessages!: string[];
 
   /* Desativa o submit apos enviar */
   submittingForm: boolean = false;
