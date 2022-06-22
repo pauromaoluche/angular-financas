@@ -25,32 +25,113 @@
             Informações sobre o Lançamento
         </div>
         <div class="card-body">
-
-            <div class="mb-3">
-                <label for="inputCategory" class="form-label">Nome do Lançamento</label>
-                <input type="text" class="form-control" id="inputCategory" formControlName="name">
-                <div class="text-danger" *ngIf="entryForm.get('name')?.invalid && entryForm.get('name')?.touched">
-                    <div *ngIf="entryForm.get('name')?.errors?.['required']">Nome é obrigatorio</div>
-                    <div *ngIf="entryForm.get('name')?.errors?.['minlength']">Deve ter pelo menos 5 caracteres</div>
+            <div class="row">
+                <!-- name -->
+                <div class="form-group col-lg-5 mb-3">
+                    <label for="inputCategory" class="form-label">Nome do Lançamento</label>
+                    <input type="text" class="form-control" id="inputCategory" formControlName="name">
+                    <div class="text-danger" *ngIf="entryForm.get('name')?.invalid && entryForm.get('name')?.touched">
+                        <div *ngIf="entryForm.get('name')?.errors?.['required']">Nome é obrigatorio</div>
+                        <div *ngIf="entryForm.get('name')?.errors?.['minlength']">Deve ter pelo menos 5 caracteres</div>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="inputDescCategory" class="form-label">Descrição da categoria</label>
-                <input type="text" class="form-control" id="inputDescCategory" formControlName="description">
-                <div class="text-danger" *ngIf="entryForm.get('description')?.invalid && entryForm.get('description')?.touched">
-                    <div *ngIf="entryForm.get('description')?.errors?.['required']">Descrição é obrigatorio</div>
-                    <div *ngIf="entryForm.get('description')?.errors?.['minlength']">Deve ter pelo menos 5 caracteres</div>
-                </div>
-            </div>
-        </div>
 
-        <div class="alert alert-danger" *ngIf="serverErrorMessages">
-            <strong>Erro no servidor:
-                <ul>
-                    <li *ngFor="let error of serverErrorMessages">{{ error }}</li>
-                </ul>
-            </strong>
+                <!-- type -->
+                <div class="form-group col-lg-2  mb-3">
+                    <label for="type" class="form-label">Tipo do Lançamento</label>
+                    <select name="type" id="type" formControlName="type" class="form-control">
+                        <option *ngFor="let option of typeOptions" [ngValue]="option.value">{{ option.text }}</option>
+                      </select>
+
+                    <div class="text-danger" *ngIf="entryForm.get('type')?.invalid && entryForm.get('type')?.touched">
+                        <div *ngIf="entryForm.get('type')?.errors?.['required']">Descrição é obrigatorio</div>
+                    </div>
+                </div>
+
+                <!-- amount -->
+                <div class="form-group col-lg-3 mb-3">
+                    <label for="amount" class="form-label">Valor</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">R$</div>
+                        </div>
+                        <input [imask]="imaskConfig" type="text" class="form-control" id="amount"
+                            formControlName="amount">
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="entryForm.get('amount')?.invalid && entryForm.get('amount')?.touched">
+                        <div *ngIf="entryForm.get('amount')?.errors?.['required']">Descrição é obrigatorio</div>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-2 mb-3">
+                    <label for="date" class="form-label">Data</label>
+                    <div>
+                        <p-calendar id="date" formControlName="date" inputStyleClass="form-control" dataType="string"
+                            dateFormat="dd/mm/yy" [locale]="ptBR" [showButtonBar]="true"></p-calendar>
+                    </div>
+                    <div class="text-danger" *ngIf="entryForm.get('date')?.invalid && entryForm.get('date')?.touched">
+                        <div *ngIf="entryForm.get('date')?.errors?.['required']">Descrição é obrigatorio</div>
+                    </div>
+                </div>
+
+                <!-- paid -->
+                <div class="form-group col-lg-2 mb-3">
+                    <label for="paid" class="form-label">Pago</label>
+                    <div>
+                        <div class="btn-group">
+                            <label (click)="entryForm.get('paid')?.setValue(true)"
+                                [class.active]="entryForm.get('paid')!.value == true" class="btn btn-outline-info">
+                                Pago
+                            </label>
+                            <label (click)="entryForm.get('paid')?.setValue(false)"
+                                [class.active]="entryForm.get('paid')!.value == false" class="btn btn-outline-info">
+                                Pendente
+                            </label>
+                        </div>
+                    </div>
+                    <div class="text-danger" *ngIf="entryForm.get('paid')?.invalid && entryForm.get('paid')?.touched">
+                        <div *ngIf="entryForm.get('paid')?.errors?.['required']">Descrição é obrigatorio</div>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-3  mb-3">
+                    <label for="categoryId" class="form-label">Categoria</label>
+                    <select id="id" formControlName="categoryId" class="form-control">
+                        <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name}}</option>
+                    </select>
+
+                    <div class="text-danger"
+                        *ngIf="entryForm.get('categoryId')?.invalid && entryForm.get('categoryId')?.touched">
+                        <div *ngIf="entryForm.get('categoryId')?.errors?.['required']">Descrição é obrigatorio</div>
+                    </div>
+                </div>
+
+                <!-- description -->
+                <div class="form-group col-lg-7 mb-3">
+                    <label for="inputDescCategory" class="form-label">Descrição do lançamento</label>
+                    <input type="text" class="form-control" id="inputDescCategory" formControlName="description">
+                    <div class="text-danger"
+                        *ngIf="entryForm.get('description')?.invalid && entryForm.get('description')?.touched">
+                        <div *ngIf="entryForm.get('description')?.errors?.['required']">Descrição é obrigatorio</div>
+                        <div *ngIf="entryForm.get('description')?.errors?.['minlength']">Deve ter pelo menos 5
+                            caracteres
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="alert alert-danger" *ngIf="serverErrorMessages">
+                <strong>Erro no servidor:
+                    <ul>
+                        <li *ngFor="let error of serverErrorMessages">{{ error }}</li>
+                    </ul>
+                </strong>
+            </div>
+            <button [disabled]="submittingForm || entryForm.invalid" type="submit"
+                class="btn btn-primary">Salvar</button>
         </div>
-        <button [disabled]="submittingForm || entryForm.invalid" type="submit" class="btn btn-primary">Salvar</button>
     </div>
 </form>
+
+<pre>{{ entryForm.value | json }}</pre>

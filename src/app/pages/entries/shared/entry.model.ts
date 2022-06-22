@@ -16,9 +16,9 @@ export class Entry {
     ) { }
 
     static types = {
-        expense: 'despesa',
+        expense: 'Despesa',
         revenue: 'Receita'
-    };
+      };
 
     get paidText(): string{
         return this.paid ? 'Pago': 'Pendente';
